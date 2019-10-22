@@ -3,6 +3,7 @@ const http = require('http')
 const express = require('express')
 const hbs = require('hbs')
 const socketio = require('socket.io')
+const Filter = require('bad-words')
 
 
 const app = express()
@@ -22,12 +23,21 @@ io.on('connection', (socket) => {
     socket.emit('message', 'Welcome!')
     socket.broadcast.emit('message', 'A new user joined')
 
-    socket.on('sendMessage', (msg) => {
+    socket.on('sendMessage', (msg, callback) => {
+        const filtr = new Filter()
+        
+        if(filtr.isProfane(msg)) {
+            return callback('Profanity is not allowed')
+        }
+        
+
         io.emit('message', msg)
+        callback()
     })
 
-    socket.on('sendLocation', (coords) => {
+    socket.on('sendLocation', (coords, callback) => {
         io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        callback()
     })
 
     socket.on('disconnect', () => {
