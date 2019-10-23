@@ -4,6 +4,7 @@ const express = require('express')
 const hbs = require('hbs')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
+const { generateMessage, generateLocationMessage } = require('./utils/messages')
 
 
 const app = express()
@@ -20,8 +21,8 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('New Web socket connection.')
 
-    socket.emit('message', 'Welcome!')
-    socket.broadcast.emit('message', 'A new user joined')
+    socket.emit('message', generateMessage('Welcome!'))
+    socket.broadcast.emit('message', generateMessage('A new user joined'))
 
     socket.on('sendMessage', (msg, callback) => {
         const filtr = new Filter()
@@ -31,17 +32,17 @@ io.on('connection', (socket) => {
         }
         
 
-        io.emit('message', msg)
+        io.emit('message', generateMessage(msg))
         callback()
     })
 
     socket.on('sendLocation', (coords, callback) => {
-        io.emit('locationMessage', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
         callback()
     })
 
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left!')
+        io.emit('message', generateMessage('A user has left!'))
     })
 })
 
