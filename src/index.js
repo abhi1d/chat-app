@@ -21,8 +21,17 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('New Web socket connection.')
 
-    socket.emit('message', generateMessage('Welcome!'))
-    socket.broadcast.emit('message', generateMessage('A new user joined'))
+    
+
+    socket.on('join' , ({ username, room }) => {
+        socket.join(room)
+
+        socket.emit('message', generateMessage('Welcome!'))
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+
+        // socket.emit, io.emit, socket.broadcast.emit
+        // io.to.emit, socket.broadcast.to.emit
+    })
 
     socket.on('sendMessage', (msg, callback) => {
         const filtr = new Filter()
@@ -32,7 +41,7 @@ io.on('connection', (socket) => {
         }
         
 
-        io.emit('message', generateMessage(msg))
+        io.to('Center City').emit('message', generateMessage(msg))
         callback()
     })
 
