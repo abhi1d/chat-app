@@ -90,7 +90,7 @@ const getUserInRoom = (room) => {
 
 module.exports = {
     addUser,
-    removedUser,
+    removeUser,
     getUser,
     getUserInRoom
 }
