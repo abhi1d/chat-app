@@ -7,6 +7,5 @@ This is similar to IRC (Internet Relay Chat).
 ```
 npm install
 npm start
-open screen -> type in name and same room number
 ```
 
