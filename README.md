@@ -2,5 +2,4 @@
 ```
 A communication app for the different users in the same room.
 This is similar to IRC (Internet Relay Chat).
-Link to app -> http://geekabhi.ninja/
 ```
